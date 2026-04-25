@@ -19,9 +19,9 @@ android {
     }
     signingConfigs {
         create("release") {
-            val keystoreFile = file("release.jks")
+            val keystorePath = System.getenv("KEYSTORE_PATH") ?: "release.jks"
 
-            storeFile = keystoreFile
+            storeFile = file(keystorePath)
             storePassword = System.getenv("KEYSTORE_PASSWORD")
             keyAlias = System.getenv("KEY_ALIAS")
             keyPassword = System.getenv("KEY_PASSWORD")
@@ -29,7 +29,6 @@ android {
     }
     buildTypes {
         release {
-            isMinifyEnabled = false
             signingConfig = signingConfigs.getByName("release")
         }
     }

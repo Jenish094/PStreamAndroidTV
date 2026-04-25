@@ -20,7 +20,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.KEYSTORE }}" | base64 --decode > release.jks
 
+      - name: Move keystore to expected location
+        run: mv release.jks app/release.jks
       - name: Grant execute permission
         run: chmod +x gradlew
 
