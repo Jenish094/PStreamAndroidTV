@@ -17,21 +17,35 @@ android {
         versionName = "1.0"
 
     }
+android {
+
     signingConfigs {
         create("release") {
-            val keystorePath = System.getenv("KEYSTORE_PATH") ?: "release.jks"
+            val storePassword = System.getenv("KEYSTORE_PASSWORD")
+                ?: throw GradleException("Missing KEYSTORE_PASSWORD")
+
+            val keyAlias = System.getenv("KEY_ALIAS")
+                ?: throw GradleException("Missing KEY_ALIAS")
+
+            val keyPassword = System.getenv("KEY_PASSWORD")
+                ?: throw GradleException("Missing KEY_PASSWORD")
+
+            val keystorePath = System.getenv("KEYSTORE_PATH")
+                ?: "app/release.jks"
 
             storeFile = file(keystorePath)
-            storePassword = System.getenv("KEYSTORE_PASSWORD")
-            keyAlias = System.getenv("KEY_ALIAS")
-            keyPassword = System.getenv("KEY_PASSWORD")
+            this.storePassword = storePassword
+            this.keyAlias = keyAlias
+            this.keyPassword = keyPassword
         }
     }
+
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
         }
     }
+}
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
